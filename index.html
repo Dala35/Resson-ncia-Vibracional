@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Afrokódica - Módulo 4: Ressonância Vibracional</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #010204; color: #f8fafc; margin: 0; overflow: hidden; }
+        .font-mono { font-family: 'JetBrains Mono', monospace; }
+        
+        .aura-bg {
+            background: radial-gradient(circle at 50% 50%, #0a0f2b 0%, #010204 100%);
+        }
+
+        /* Animação de Onda Harmónica */
+        .wave-path {
+            stroke-dasharray: 1000;
+            stroke-dashoffset: 1000;
+            animation: dash 5s linear infinite;
+        }
+
+        @keyframes dash {
+            to { stroke-dashoffset: 0; }
+        }
+
+        .frequency-bar {
+            transition: height 0.1s ease-out, background-color 0.3s ease;
+        }
+
+        .orb-glow {
+            filter: blur(40px);
+            opacity: 0.3;
+        }
+
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        /* Efeito de Cintilação Estelar */
+        .twinkle {
+            animation: twinkle 3s ease-in-out infinite;
+        }
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.2; }
+            50% { opacity: 0.6; }
+        }
+    </style>
+</head>
+<body class="aura-bg">
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect, useRef, useMemo } = React;
+
+        const APP_ID = "AFROKODICA-RESONANCE-4.0";
+
+        // Frequências de Solfeggio para ressonância visual
+        const FREQUENCIES = [
+            { hz: 174, label: "Alívio", color: "from-blue-900 to-blue-700" },
+            { hz: 396, label: "Libertação", color: "from-red-900 to-red-700" },
+            { hz: 528, label: "DNA / Milagre", color: "from-emerald-900 to-emerald-700" },
+            { hz: 639, label: "Conexão", color: "from-amber-900 to-amber-700" },
+            { hz: 852, label: "Intuição", color: "from-purple-900 to-purple-700" }
+        ];
+
+        function App() {
+            const [activeFreq, setActiveFreq] = useState(FREQUENCIES[2]);
+            const [amplitude, setAmplitude] = useState(0.5);
+            const [time, setTime] = useState(0);
+            const [harmonics, setHarmonics] = useState([]);
+            
+            // Loop de animação temporal
+            useEffect(() => {
+                let frame;
+                const animate = () => {
+                    setTime(t => t + 0.05);
+                    frame = requestAnimationFrame(animate);
+                };
+                frame = requestAnimationFrame(animate);
+                return () => cancelAnimationFrame(frame);
+            }, []);
+
+            // Gerar harmónicos aleatórios baseados na frequência ativa
+            useEffect(() => {
+                const h = Array.from({ length: 40 }, (_, i) => ({
+                    id: i,
+                    offset: Math.random() * Math.PI * 2,
+                    speed: 0.2 + Math.random() * 0.5,
+                    heightMultiplier: 0.5 + Math.random() * 1.5
+                }));
+                setHarmonics(h);
+            }, [activeFreq]);
+
+            // Cálculo da onda principal
+            const points = useMemo(() => {
+                let p = "";
+                for (let x = 0; x <= 100; x += 1) {
+                    const y = 50 + Math.sin(x * 0.2 + time) * (amplitude * 20);
+                    p += `${x === 0 ? 'M' : 'L'} ${x} ${y} `;
+                }
+                return p;
+            }, [time, amplitude]);
+
+            return (
+                <div className="h-screen w-full flex flex-col relative z-10 p-6 overflow-hidden">
+                    
+                    {/* Header de Frequência */}
+                    <header className="flex justify-between items-center mb-8 bg-white/[0.02] border border-white/10 p-6 rounded-[2.5rem] backdrop-blur-3xl shadow-2xl">
+                        <div className="flex items-center gap-6">
+                            <div className="relative">
+                                <div className="w-14 h-14 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 animate-pulse orb-glow absolute"></div>
+                                <div className="w-14 h-14 rounded-2xl border-2 border-white/20 flex items-center justify-center relative z-10 bg-black/50 text-xl font-black italic">
+                                    Ω
+                                </div>
+                            </div>
+                            <div>
+                                <h1 className="text-2xl font-black tracking-tighter text-white flex items-center gap-3">
+                                    Módulo_04
+                                    <span className="text-[10px] bg-white/10 px-3 py-1 rounded-full font-mono font-normal tracking-widest text-blue-400">RESSONÂNCIA_VIBRACIONAL</span>
+                                </h1>
+                                <p className="text-[9px] font-mono text-slate-500 tracking-[0.4em] uppercase mt-1">Sincronização de Campo Bio-Digital</p>
+                            </div>
+                        </div>
+
+                        <div className="flex gap-4">
+                            {FREQUENCIES.map(f => (
+                                <button 
+                                    key={f.hz}
+                                    onClick={() => setActiveFreq(f)}
+                                    className={`px-4 py-2 rounded-xl text-[10px] font-mono transition-all border ${activeFreq.hz === f.hz ? 'bg-white/10 border-white/20 text-white shadow-lg' : 'border-transparent text-slate-600 hover:text-slate-400'}`}
+                                >
+                                    {f.hz}Hz
+                                </button>
+                            ))}
+                        </div>
+                    </header>
+
+                    <div className="flex-1 flex gap-8 min-h-0">
+                        {/* Painel Lateral: Modulação de Amplitude */}
+                        <aside className="w-80 flex flex-col gap-6">
+                            <div className="glass-panel p-8 rounded-[3rem] flex-1 flex flex-col">
+                                <h3 className="text-[10px] font-mono text-blue-400 uppercase tracking-widest mb-10 flex items-center gap-3">
+                                    <span className="w-4 h-[1px] bg-blue-500"></span>
+                                    Oscilador de Campo
+                                </h3>
+
+                                <div className="space-y-12">
+                                    <div className="group">
+                                        <div className="flex justify-between text-[10px] font-mono text-slate-500 mb-4 uppercase tracking-tighter">
+                                            <span>Amplitude_Vibracional</span>
+                                            <span className="text-blue-400 font-bold">{(amplitude * 100).toFixed(0)}%</span>
+                                        </div>
+                                        <input 
+                                            type="range" min="0" max="1" step="0.01" 
+                                            value={amplitude} 
+                                            onChange={(e) => setAmplitude(parseFloat(e.target.value))}
+                                            className="w-full h-1 bg-white/10 appearance-none rounded-full accent-blue-500"
+                                        />
+                                    </div>
+
+                                    <div className="p-6 bg-white/[0.03] border border-white/5 rounded-3xl space-y-4">
+                                        <div className="flex justify-between items-end">
+                                            <span className="text-[9px] text-slate-500 font-mono uppercase">Modo_Atual</span>
+                                            <span className="text-xs font-bold text-white uppercase italic">{activeFreq.label}</span>
+                                        </div>
+                                        <div className={`h-1.5 w-full bg-gradient-to-r ${activeFreq.color} rounded-full`}></div>
+                                        <p className="text-[10px] text-slate-400 leading-relaxed italic">
+                                            A frequência de {activeFreq.hz}Hz estabiliza o fluxo de dados na rede neural, criando um ambiente de ressonância harmónica.
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div className="mt-auto space-y-4">
+                                    <div className="grid grid-cols-2 gap-3">
+                                        <div className="p-4 bg-white/5 rounded-2xl border border-white/5">
+                                            <p className="text-[8px] text-slate-500 uppercase mb-1">Coerência</p>
+                                            <p className="text-xs font-bold">0.998</p>
+                                        </div>
+                                        <div className="p-4 bg-white/5 rounded-2xl border border-white/5">
+                                            <p className="text-[8px] text-slate-500 uppercase mb-1">Ressonância</p>
+                                            <p className="text-xs font-bold text-emerald-400">ATIVA</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </aside>
+
+                        {/* Visualizador Central: Geometria de Frequência */}
+                        <main className="flex-1 relative glass-panel rounded-[4rem] overflow-hidden group">
+                            {/* Fundo de Partículas de Luz */}
+                            <div className="absolute inset-0 z-0">
+                                {[...Array(20)].map((_, i) => (
+                                    <div 
+                                        key={i}
+                                        className="absolute w-1 h-1 bg-blue-500/20 rounded-full twinkle"
+                                        style={{
+                                            top: `${Math.random() * 100}%`,
+                                            left: `${Math.random() * 100}%`,
+                                            animationDelay: `${Math.random() * 5}s`
+                                        }}
+                                    ></div>
+                                ))}
+                            </div>
+
+                            <svg className="w-full h-full relative z-10" viewBox="0 0 100 100" preserveAspectRatio="none">
+                                <defs>
+                                    <linearGradient id="waveGrad" x1="0%" y1="50%" x2="100%" y2="50%">
+                                        <stop offset="0%" stopColor="rgba(59, 130, 246, 0)" />
+                                        <stop offset="50%" stopColor="rgba(59, 130, 246, 0.8)" />
+                                        <stop offset="100%" stopColor="rgba(59, 130, 246, 0)" />
+                                    </linearGradient>
+                                </defs>
+                                
+                                {/* Onda Principal */}
+                                <path 
+                                    d={points} 
+                                    fill="none" 
+                                    stroke="url(#waveGrad)" 
+                                    strokeWidth="0.8" 
+                                    className="drop-shadow-[0_0_8px_rgba(59,130,246,0.5)]"
+                                />
+
+                                {/* Espelhamento da Onda (Bio-Simetria) */}
+                                <path 
+                                    d={points.replace(/L (\d+) (\d+\.?\d*)/g, (m, x, y) => `L ${x} ${100 - parseFloat(y)}`).replace(/M (\d+) (\d+\.?\d*)/, (m, x, y) => `M ${x} ${100 - parseFloat(y)}`)}
+                                    fill="none" 
+                                    stroke="rgba(59, 130, 246, 0.1)" 
+                                    strokeWidth="0.2" 
+                                />
+                            </svg>
+
+                            {/* Equalizador Harmónico de Fundo */}
+                            <div className="absolute inset-x-0 bottom-0 h-48 flex items-end justify-center gap-1 px-12 pb-12 z-0 opacity-40">
+                                {harmonics.map((h, i) => {
+                                    const h_val = 10 + Math.abs(Math.sin(time * h.speed + h.offset)) * (40 * h.heightMultiplier * amplitude);
+                                    return (
+                                        <div 
+                                            key={i}
+                                            className="flex-1 frequency-bar rounded-t-full bg-gradient-to-t from-blue-900/20 to-blue-400/30"
+                                            style={{ height: `${h_val}%` }}
+                                        ></div>
+                                    );
+                                })}
+                            </div>
+
+                            {/* HUD de Informação Geométrica */}
+                            <div className="absolute top-12 right-12 text-right font-mono pointer-events-none">
+                                <p className="text-[8px] text-slate-500 uppercase tracking-[0.3em] mb-1">Padrão_Harmónico</p>
+                                <p className="text-xs text-blue-400 font-bold tracking-widest">Φ_RESONANCE_STABLE</p>
+                            </div>
+                        </main>
+                    </div>
+
+                    {/* Footer de Integridade */}
+                    <footer className="mt-8 flex justify-between items-center px-10 py-6 glass-panel rounded-[2rem]">
+                        <div className="flex gap-16">
+                            <div className="flex flex-col">
+                                <span className="text-[8px] text-slate-600 uppercase font-mono mb-1">Sincronia Afrokódica</span>
+                                <span className="text-[10px] text-white/80 font-bold uppercase tracking-widest italic">ESTADO_DE_FLUXO</span>
+                            </div>
+                            <div className="flex flex-col">
+                                <span className="text-[8px] text-slate-600 uppercase font-mono mb-1">Localização Dimensional</span>
+                                <span className="text-[10px] text-blue-500 font-bold uppercase tracking-widest">Namibe_Frequency_Hub</span>
+                            </div>
+                        </div>
+                        <div className="flex items-center gap-4">
+                            <div className="text-right">
+                                <p className="text-[7px] text-slate-500 uppercase mb-0.5">Vibração de Campo</p>
+                                <p className="text-[10px] text-emerald-400 font-mono font-bold italic">Sincronizado_MEC-04</p>
+                            </div>
+                            <div className="w-1.5 h-8 bg-emerald-500/20 rounded-full flex items-end">
+                                <div className="w-full bg-emerald-500 rounded-full animate-pulse" style={{ height: '70%' }}></div>
+                            </div>
+                        </div>
+                    </footer>
+                </div>
+            );
+        }
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>
